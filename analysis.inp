@@ -1,0 +1,17 @@
+open /home/martin/Work/emi/data.ods --coloffset=1
+setobs 1 1 --special-time-series
+logs s_eua f_eua s_cer f_cer
+dsf_eua=l_f_eua-l_s_eua
+dsf_cer=l_f_cer-l_s_cer
+ll_dsf_eua=log(dsf_eua)-log(time_to_mat)
+ll_dsf_cer=log(dsf_cer)-log(time_to_mat)
+smpl 100 819
+diff l_s_eua
+diff l_s_cer
+garch 1 1 ; d_l_s_eua --nc
+ols ll_dsf_eua const ll_dsf_eua(-1)
+smpl 579 819
+garch 0 1 ; d_l_s_cer --nc
+smpl 100 819
+ols ll_dsf_cer const ll_dsf_cer(-1)
+
